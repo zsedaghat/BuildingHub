@@ -1,0 +1,67 @@
+# Charge Domain
+
+## Purpose
+
+The Charge domain is responsible for defining charge calculation rules, generating charges for units, and tracking the financial status of those charges.
+
+---
+
+## Charge Plan
+
+Represents a collection of rules used to calculate charges for a specific period.
+
+### Examples
+
+- Monthly Residential Plan
+- Commercial Building Plan
+- Seasonal Maintenance Plan
+
+---
+
+## Charge Component
+
+Represents one component of a charge calculation.
+
+### Component Types
+
+- Fixed
+- Area Based
+- Resident Count Based
+- Parking Based
+- Custom
+
+---
+
+## Charge
+
+Represents the calculated amount owed by a Unit for a specific billing period.
+
+### Properties
+
+- Unit
+- Charge Plan
+- Billing Period
+- Amount
+- Due Date
+- Status
+
+### Statuses
+
+- Draft
+- Issued
+- Partially Paid
+- Paid
+- Overdue
+- Cancelled
+
+---
+
+## Charge Rules
+
+1. A Charge belongs to exactly one Unit.
+2. A Charge belongs to one billing period.
+3. A Charge is calculated based on a Charge Plan.
+4. A Charge may contain multiple Charge Components.
+5. A Charge must preserve the calculated amount after issuance.
+6. Changes to a Charge Plan must not modify previously issued Charges.
+7. A Charge may be paid by one or more Persons.

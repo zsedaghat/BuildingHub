@@ -1,0 +1,5 @@
+﻿namespace BuildingHub.SharedKernel.Result;
+
+public sealed record Error(
+    string Code,
+    string Message);

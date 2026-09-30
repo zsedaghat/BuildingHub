@@ -1,0 +1,32 @@
+# Expense and Income Domain
+
+## Purpose
+
+The Expense and Income domain is responsible for managing operational financial activities that occur in a Community.
+
+It provides business-level operations for recording:
+
+- Expenses
+- Supplier invoices
+- Other income
+- Refunds
+- Operational payments
+
+The Accounting domain is responsible for recording the final financial transactions.
+
+---
+
+# Separation of Responsibilities
+
+The Expense and Income domain represents business operations.
+
+The Accounting domain represents financial accounting records.
+
+```text
+Business Operation
+        ↓
+Expense / Income
+        ↓
+Accounting Transaction
+        ↓
+Journal Entry

@@ -1,0 +1,139 @@
+# BuildingHub Architecture Overview
+
+## Architecture Style
+
+BuildingHub uses a Modular Monolith architecture combined with Clean Architecture principles.
+
+The system is initially deployed as a single application but is internally divided into independent business modules.
+
+---
+
+# Why Modular Monolith?
+
+BuildingHub is designed as a commercial product.
+
+A Modular Monolith provides:
+
+- Simple deployment
+- Lower infrastructure cost
+- Faster development
+- Easier debugging
+- Clear business boundaries
+- Better separation than a traditional monolith
+- Possibility to extract modules into microservices later
+
+---
+
+# High-Level Architecture
+
+```text
+                    ┌─────────────────────┐
+                    │      Frontend       │
+                    │  Web / Mobile App   │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │       API           │
+                    │    ASP.NET Core     │
+                    └──────────┬──────────┘
+                               │
+             ┌─────────────────┼─────────────────┐
+             │                 │                 │
+             ▼                 ▼                 ▼
+      ┌────────────┐    ┌────────────┐    ┌────────────┐
+      │ Community  │    │ Resident   │    │  Charge    │
+      │  Module    │    │  Module    │    │  Module    │
+      └────────────┘    └────────────┘    └────────────┘
+             │                 │                 │
+             ▼                 ▼                 ▼
+      ┌────────────┐    ┌────────────┐    ┌────────────┐
+      │ Accounting │    │  Expense   │    │   Future   │
+      │  Module    │    │  Module    │    │  Modules   │
+      └────────────┘    └────────────┘    └────────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │     Database        │
+                    │     PostgreSQL      │
+                    └─────────────────────┘
+
+
+
+
+
+
+
+
+Solution Structure
+BuildingHub
+│
+├── src
+│   │
+│   ├── BuildingHub.Api
+│   │
+│   ├── BuildingHub.SharedKernel
+│   │
+│   └── Modules
+│       │
+│       ├── Community
+│       │   ├── BuildingHub.Modules.Community.Domain
+│       │   ├── BuildingHub.Modules.Community.Application
+│       │   └── BuildingHub.Modules.Community.Infrastructure
+│       │
+│       ├── Resident
+│       │   ├── BuildingHub.Modules.Resident.Domain
+│       │   ├── BuildingHub.Modules.Resident.Application
+│       │   └── BuildingHub.Modules.Resident.Infrastructure
+│       │
+│       ├── Charge
+│       │   ├── BuildingHub.Modules.Charge.Domain
+│       │   ├── BuildingHub.Modules.Charge.Application
+│       │   └── BuildingHub.Modules.Charge.Infrastructure
+│       │
+│       ├── Accounting
+│       │   ├── BuildingHub.Modules.Accounting.Domain
+│       │   ├── BuildingHub.Modules.Accounting.Application
+│       │   └── BuildingHub.Modules.Accounting.Infrastructure
+│       │
+│       └── Expense
+│           ├── BuildingHub.Modules.Expense.Domain
+│           ├── BuildingHub.Modules.Expense.Application
+│           └── BuildingHub.Modules.Expense.Infrastructure
+│
+└── tests
+    │
+    ├── UnitTests
+    │
+    ├── IntegrationTests
+    │
+    └── ArchitectureTests
+
+
+
+
+
+
+Clean Architecture Layers
+┌────────────────────────────────────────────┐
+│                 API                        │
+│          Controllers / Endpoints           │
+└────────────────────┬───────────────────────┘
+                     │
+                     ▼
+┌────────────────────────────────────────────┐
+│              Application                   │
+│       Use Cases / CQRS / DTOs              │
+└────────────────────┬───────────────────────┘
+                     │
+                     ▼
+┌────────────────────────────────────────────┐
+│                Domain                      │
+│     Entities / Aggregates / Rules          │
+└────────────────────────────────────────────┘
+                     ▲
+                     │
+┌────────────────────────────────────────────┐
+│             Infrastructure                 │
+│      EF Core / Database / External APIs    │
+└────────────────────────────────────────────┘

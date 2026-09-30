@@ -1,0 +1,254 @@
+# Community Domain
+
+## Purpose
+
+The Community domain is responsible for managing the physical structure of properties and the organizational hierarchy of the BuildingHub system.
+
+It supports:
+
+- Residential complexes
+- Commercial complexes
+- Mixed-use properties
+- Towns
+- Campuses
+- Multi-building properties
+
+The physical hierarchy is:
+
+Tenant
+    ↓
+Community
+    ↓
+Building
+    ↓
+Floor
+    ↓
+Unit
+
+---
+
+# Tenant
+
+A Tenant represents an organization or company that uses BuildingHub to manage one or more Communities.
+
+Examples:
+
+- Property Management Company
+- Real Estate Company
+- Building Management Company
+- Property Owner
+
+## Responsibilities
+
+A Tenant:
+
+- Owns or manages multiple Communities.
+- Has isolated data from other Tenants.
+- Manages users and permissions.
+- Controls its own Communities and financial data.
+
+## Relationships
+
+A Tenant:
+
+- Can have multiple Communities.
+- Can have multiple Users.
+- Has isolated data from other Tenants.
+
+---
+
+# Community
+
+A Community represents a managed property or group of properties.
+
+Examples:
+
+- Narges Residential Complex
+- Green Valley Complex
+- City Center Commercial Complex
+- Sepid Town
+- University Campus
+
+A Community may contain one or more Buildings.
+
+## Responsibilities
+
+A Community:
+
+- Represents the top-level property being managed.
+- Contains one or more Buildings.
+- Stores general location information.
+- Provides the scope for residents and financial operations.
+- Provides the scope for shared facilities and services.
+
+## Properties
+
+- Name
+- Code
+- Description
+- Address
+- Postal Code
+- City
+- Country
+- Latitude
+- Longitude
+- Status
+
+## Relationships
+
+A Community:
+
+- Belongs to exactly one Tenant.
+- Can contain multiple Buildings.
+- Can have multiple Residents.
+- Can have multiple Charge Plans.
+- Can have financial transactions.
+- Can have shared Facilities.
+
+---
+
+# Community Status
+
+A Community can have the following statuses:
+
+- Active
+- Inactive
+- Archived
+
+## Status Rules
+
+1. An Active Community can be managed normally.
+2. An Inactive Community cannot receive new operational transactions.
+3. An Archived Community is preserved for historical reporting.
+4. A Community with financial history must not be physically deleted.
+
+---
+
+# Building
+
+A Building represents a physical building inside a Community.
+
+Examples:
+
+- Tower A
+- Tower B
+- Main Building
+- Commercial Building
+- Administrative Building
+
+## Responsibilities
+
+A Building:
+
+- Represents a physical structure.
+- Contains Floors.
+- Contains Units.
+- Stores building-specific information.
+
+## Properties
+
+- Name
+- Code
+- Building Type
+- Usage Type
+- Construction Year
+- Total Floors
+- Address
+- Postal Code
+- Status
+- Description
+
+## Relationships
+
+A Building:
+
+- Belongs to exactly one Community.
+- Can contain multiple Floors.
+- Can contain multiple Units.
+
+---
+
+# Building Types
+
+Examples:
+
+- Tower
+- Block
+- Villa
+- Commercial Building
+- Office Building
+- Warehouse
+- Other
+
+---
+
+# Building Usage Types
+
+Examples:
+
+- Residential
+- Commercial
+- Office
+- Industrial
+- Mixed Use
+
+---
+
+# Building Status
+
+Possible statuses:
+
+- Active
+- Inactive
+- Under Construction
+- Archived
+
+---
+
+# Floor
+
+A Floor represents a level within a Building.
+
+## Examples
+
+- Basement 2
+- Basement 1
+- Ground Floor
+- Floor 1
+- Floor 2
+- Roof
+
+## Properties
+
+- Name
+- Number
+- Sort Order
+- Description
+
+## Relationships
+
+A Floor:
+
+- Belongs to exactly one Building.
+- Can contain multiple Units.
+
+---
+
+# Floor Numbering
+
+The system must support:
+
+- Negative numbers for basements.
+- Zero for the ground floor.
+- Positive numbers for upper floors.
+
+Example:
+
+```text
+Building: Tower A
+
+Floor -2 → Basement 2
+Floor -1 → Basement 1
+Floor  0 → Ground Floor
+Floor  1 → First Floor
+Floor  2 → Second Floor

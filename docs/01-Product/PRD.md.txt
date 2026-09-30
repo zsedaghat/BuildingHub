@@ -1,0 +1,62 @@
+# BuildingHub ERP
+
+Version: 1.0.0
+
+Status: Draft
+
+---
+
+# Product Vision
+
+BuildingHub is a SaaS-ready Building & Community Management ERP designed for residential complexes, commercial buildings, and property management companies.
+
+The goal is to provide a scalable, secure, and modern platform for managing buildings, residents, accounting, payments, maintenance, and communication.
+
+---
+
+# Objectives
+
+- Building Management
+- Resident Management
+- Charge Management
+- Accounting
+- Payment Management
+- Reports
+- Notifications
+- Multi Tenant
+- SaaS Ready
+
+---
+
+# Target Users
+
+- Super Admin
+- Property Management Company
+- Building Manager
+- Accountant
+- Resident
+- Security
+
+---
+
+# MVP Modules
+
+- Authentication
+- Buildings
+- Residents
+- Charges
+- Payments
+- Accounting Lite
+- Dashboard
+
+---
+
+# Future Modules
+
+- Tickets
+- Visitor Management
+- Mobile App
+- Rule Engine
+- Advanced Accounting
+- BI Dashboard
+- Smart Reports

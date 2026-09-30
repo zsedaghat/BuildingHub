@@ -1,0 +1,225 @@
+# Resident Domain
+
+## Purpose
+
+The Resident domain is responsible for managing people, their relationships with units, ownership, tenancy, residency, family members, and vehicles.
+
+---
+
+# Person
+
+Represents a real individual who interacts with the system.
+
+A Person may have different relationships with one or more Units over time.
+
+## Examples
+
+- Owner
+- Tenant
+- Resident
+- Family Member
+
+## Properties
+
+- First Name
+- Last Name
+- National ID
+- Phone Number
+- Email
+- Date of Birth
+- Status
+
+---
+
+# Unit Person Relationship
+
+Represents the relationship between a Person and a Unit.
+
+## Relationship Types
+
+- Tenant
+- Resident
+- Family Member
+
+## Properties
+
+- Person
+- Unit
+- Relationship Type
+- Start Date
+- End Date
+- Is Primary
+
+## Rules
+
+1. A Person may have relationships with multiple Units.
+2. A Unit may have multiple related Persons.
+3. Relationships may change over time.
+4. Historical relationships must be preserved.
+5. An inactive relationship must not be deleted if it is part of historical records.
+
+---
+
+# Unit Ownership
+
+Represents the ownership relationship between a Person and a Unit.
+
+A Unit may have multiple owners.
+
+Ownership may change over time.
+
+## Properties
+
+- Person
+- Unit
+- Ownership Percentage
+- Start Date
+- End Date
+- Is Primary Owner
+
+## Business Rules
+
+1. A Unit may have multiple owners.
+2. Ownership percentage must be greater than zero.
+3. Active ownership percentages should total 100%.
+4. Ownership history must be preserved.
+5. Previous ownership records must not be physically deleted.
+6. A Person may own multiple Units.
+7. A Unit may have multiple owners.
+
+---
+
+# Vehicle
+
+Represents a vehicle owned or used by a Person.
+
+## Vehicle Types
+
+- Car
+- Motorcycle
+- Van
+- Other
+
+## Properties
+
+- Person
+- Vehicle Type
+- Brand
+- Model
+- Color
+- License Plate
+- Description
+
+## Rules
+
+1. A Person may have multiple Vehicles.
+2. A Vehicle belongs to one Person.
+3. Vehicle information may be updated over time.
+4. Historical vehicle records should be preserved when required.
+
+---
+
+# Parking Assignment
+
+Represents the relationship between a Vehicle and a Parking Unit.
+
+A parking assignment may change over time.
+
+## Properties
+
+- Vehicle
+- Parking Unit
+- Start Date
+- End Date
+
+## Business Rules
+
+1. A Vehicle may be assigned to a Parking Unit.
+2. A Parking Unit may be assigned to a Vehicle.
+3. A Vehicle may change its assigned Parking Unit over time.
+4. Historical parking assignments must be preserved.
+5. A Parking Unit should not be assigned to multiple active Vehicles unless explicitly allowed by the Community rules.
+
+---
+
+# Domain Relationships
+
+```text
+Person
+   │
+   ├── UnitOwnership
+   │       │
+   │       └── Unit
+   │
+   ├── UnitPersonRelationship
+   │       │
+   │       └── Unit
+   │
+   └── Vehicle
+           │
+           └── ParkingAssignment
+                   │
+                   └── Parking Unit
+
+
+
+
+
+
+
+
+
+
+
+
+example
+
+Person: Ali Rezaei
+│
+├── Ownership
+│   └── Apartment 101
+│       └── Ownership: 50%
+│
+├── Relationship
+│   └── Apartment 101
+│       └── Role: Resident
+│
+├── Vehicle
+│   └── Toyota Corolla
+│
+└── Parking Assignment
+    └── Parking P-01
+
+
+
+Ownership Example
+
+Unit 101
+│
+├── Ali Rezaei
+│   └── Ownership: 50%
+│
+└── Sara Rezaei
+    └── Ownership: 50%
+
+
+
+
+Historical Ownership
+
+Unit 101
+
+2020 ───────── 2024
+Ali Rezaei
+Ownership: 100%
+
+2025 ────────────────────────>
+Sara Rezaei
+Ownership: 100%
+
+
+
+
+
+
+

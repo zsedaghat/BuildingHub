@@ -1,0 +1,42 @@
+# Accounting Domain
+
+## Purpose
+
+The Accounting domain is responsible for managing the financial records of a Community.
+
+It records financial transactions using a double-entry accounting model.
+
+The Accounting domain supports:
+
+- Income
+- Expenses
+- Receivables
+- Payables
+- Payments
+- Refunds
+- Account balances
+- Financial reporting
+- Audit history
+
+---
+
+# Accounting Principles
+
+The Accounting domain follows the double-entry accounting principle.
+
+Every financial transaction must have at least:
+
+- One Debit entry
+- One Credit entry
+
+The total Debit amount must equal the total Credit amount.
+
+---
+
+# Example
+
+When a Charge is issued to Unit 101:
+
+```text
+Unit 101 Receivable     Debit   $420
+    Charge Revenue              Credit  $420

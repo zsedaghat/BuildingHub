@@ -21,11 +21,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingHub.Modules.Communi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Accounting", "Accounting", "{051E158D-FF4A-475F-9E41-FAF171B0425C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingHub.Modules.Accounting.Domain", "BuildingHub.Modules.Accounting.Domain\BuildingHub.Modules.Accounting.Domain.csproj", "{CC05684D-A9AD-4806-B598-70BD6A1AE1D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingHub.Modules.Accounting.Domain", "src\Modules\Accounting\BuildingHub.Modules.Accounting.Domain\BuildingHub.Modules.Accounting.Domain.csproj", "{CC05684D-A9AD-4806-B598-70BD6A1AE1D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingHub.Modules.Accounting.Application", "BuildingHub.Modules.Accounting.Application\BuildingHub.Modules.Accounting.Application.csproj", "{26B3D505-0806-425A-889A-FB8942BFD088}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingHub.Modules.Accounting.Application", "src\Modules\Accounting\BuildingHub.Modules.Accounting.Application\BuildingHub.Modules.Accounting.Application.csproj", "{26B3D505-0806-425A-889A-FB8942BFD088}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingHub.Modules.Accounting.Infrastructure", "BuildingHub.Modules.Accounting.Infrastructure\BuildingHub.Modules.Accounting.Infrastructure.csproj", "{779B6B78-CFBD-43CC-82E9-DF9EE3B99845}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingHub.Modules.Accounting.Infrastructure", "src\Modules\Accounting\BuildingHub.Modules.Accounting.Infrastructure\BuildingHub.Modules.Accounting.Infrastructure.csproj", "{779B6B78-CFBD-43CC-82E9-DF9EE3B99845}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

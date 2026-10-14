@@ -1,9 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.11" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BuildingHub.Modules.Accounting.Application\BuildingHub.Modules.Accounting.Application.csproj" />
+    <ProjectReference Include="..\BuildingHub.Modules.Accounting.Domain\BuildingHub.Modules.Accounting.Domain.csproj" />
+    <ProjectReference Include="..\src\Modules\Community\BuildingHub.Modules.Community.Domain\BuildingHub.Modules.Community.Domain.csproj" />
+  </ItemGroup>
 
 </Project>

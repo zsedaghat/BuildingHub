@@ -1,3 +1,4 @@
+using BuildingHub.Modules.Accounting.Infrastructure.Persistence;
 using BuildingHub.Modules.Community.Application.Abstractions;
 using BuildingHub.Modules.Community.Application.Buildings.Create;
 using BuildingHub.Modules.Community.Application.Buildings.Delete;
@@ -44,6 +45,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<CommunityDbContext>(options =>
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddDbContext<AccountingDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 

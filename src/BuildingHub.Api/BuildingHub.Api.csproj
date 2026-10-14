@@ -17,6 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BuildingHub.Modules.Accounting.Application\BuildingHub.Modules.Accounting.Application.csproj" />
+    <ProjectReference Include="..\..\BuildingHub.Modules.Accounting.Infrastructure\BuildingHub.Modules.Accounting.Infrastructure.csproj" />
     <ProjectReference Include="..\Modules\Community\BuildingHub.Modules.Community.Infrastructure\BuildingHub.Modules.Community.Infrastructure.csproj" />
   </ItemGroup>
 

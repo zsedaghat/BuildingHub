@@ -1,4 +1,9 @@
+using BuildingHub.Api.Middlewares;
+using BuildingHub.Api.Services;
+using BuildingHub.Modules.Accounting.Application.Abstractions;
+using BuildingHub.Modules.Accounting.Domain.Entities;
 using BuildingHub.Modules.Accounting.Infrastructure.Persistence;
+using BuildingHub.Modules.Accounting.Infrastructure.Repositories;
 using BuildingHub.Modules.Community.Application.Abstractions;
 using BuildingHub.Modules.Community.Application.Buildings.Create;
 using BuildingHub.Modules.Community.Application.Buildings.Delete;
@@ -31,6 +36,7 @@ using BuildingHub.Modules.Community.Application.UnitPersons.GetList;
 using BuildingHub.Modules.Community.Application.UnitPersons.Update;
 using BuildingHub.Modules.Community.Application.Units.Create;
 using BuildingHub.Modules.Community.Application.Units.Delete;
+using BuildingHub.Modules.Community.Application.Units.GetActiveByBuildingId;
 using BuildingHub.Modules.Community.Application.Units.GetByBuildingId;
 using BuildingHub.Modules.Community.Application.Units.GetByFloorId;
 using BuildingHub.Modules.Community.Application.Units.GetById;
@@ -55,6 +61,15 @@ builder.Services.AddDbContext<AccountingDbContext>(options =>
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//MediatR
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(
+        typeof(IChargeRepository).Assembly));
+
+
+
+#region community
 
 builder.Services.AddScoped<ICommunityRepository, CommunityRepository>();
 // Community CRUD Handlers
@@ -85,6 +100,9 @@ builder.Services.AddScoped<DeleteFloorCommandHandler>();
 
 builder.Services.AddScoped<IUnitRepository, UnitRepository>();
 // Units CRUD Handlers
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(
+        typeof(GetActiveUnitsByBuildingIdQueryHandler).Assembly));
 builder.Services.AddScoped<CreateUnitCommandHandler>();
 builder.Services.AddScoped<GetUnitsQueryHandler>();
 builder.Services.AddScoped<GetUnitsByBuildingIdQueryHandler>();
@@ -111,8 +129,26 @@ builder.Services.AddScoped<GetUnitPersonsByUnitIdQueryHandler>();
 builder.Services.AddScoped<GetUnitPersonsByPersonIdQueryHandler>();
 builder.Services.AddScoped<UpdateUnitPersonCommandHandler>();
 builder.Services.AddScoped<DeleteUnitPersonCommandHandler>();
+#endregion
+
+
+#region accounting
+builder.Services.AddScoped<IChargeRepository, ChargeRepository>();
+
+builder.Services.AddScoped<IUnitChargeRepository, UnitChargeRepository>();
+
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+#endregion
+
+builder.Services.AddScoped<
+    IBuildingUnitProvider,
+    BuildingUnitProvider>();
+
+
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 

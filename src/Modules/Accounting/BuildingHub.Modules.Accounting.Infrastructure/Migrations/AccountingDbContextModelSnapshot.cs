@@ -34,6 +34,9 @@ namespace BuildingHub.Modules.Accounting.Infrastructure.Migrations
                     b.Property<int>("CalculationMethod")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Category")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -54,41 +57,79 @@ namespace BuildingHub.Modules.Accounting.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BuildingId", "PeriodYear", "PeriodMonth")
-                        .IsUnique();
+                    b.HasIndex("BuildingId", "PeriodYear", "PeriodMonth");
 
                     b.ToTable("Charges", (string)null);
                 });
 
-            modelBuilder.Entity("BuildingHub.Modules.Community.Domain.Entities.Building", b =>
+            modelBuilder.Entity("BuildingHub.Modules.Accounting.Domain.Entities.Payment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CommunityId")
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<DateTime>("PaidAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("TrackingNumber")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<Guid>("UnitChargeId")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<int>("DisplayOrder")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Building");
+                    b.HasIndex("UnitChargeId");
+
+                    b.ToTable("Payments", (string)null);
                 });
 
-            modelBuilder.Entity("BuildingHub.Modules.Accounting.Domain.Entities.Charge", b =>
+            modelBuilder.Entity("BuildingHub.Modules.Accounting.Domain.Entities.UnitCharge", b =>
                 {
-                    b.HasOne("BuildingHub.Modules.Community.Domain.Entities.Building", null)
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<Guid>("ChargeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UnitId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChargeId", "UnitId")
+                        .IsUnique();
+
+                    b.ToTable("UnitCharges", (string)null);
+                });
+
+            modelBuilder.Entity("BuildingHub.Modules.Accounting.Domain.Entities.Payment", b =>
+                {
+                    b.HasOne("BuildingHub.Modules.Accounting.Domain.Entities.UnitCharge", null)
                         .WithMany()
-                        .HasForeignKey("BuildingId")
+                        .HasForeignKey("UnitChargeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BuildingHub.Modules.Accounting.Domain.Entities.UnitCharge", b =>
+                {
+                    b.HasOne("BuildingHub.Modules.Accounting.Domain.Entities.Charge", null)
+                        .WithMany()
+                        .HasForeignKey("ChargeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

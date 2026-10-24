@@ -1,7 +1,7 @@
-﻿using BuildingHub.Modules.Accounting.Domain.Entities;
+﻿
+using BuildingHub.Modules.Accounting.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
 
 namespace BuildingHub.Modules.Accounting.Infrastructure.Persistence;
 
@@ -24,6 +24,9 @@ public class ChargeConfiguration : IEntityTypeConfiguration<Charge>
         builder.Property(x => x.CalculationMethod)
             .IsRequired();
 
+        builder.Property(x => x.Category)
+            .IsRequired();
+
         builder.Property(x => x.PeriodYear)
             .IsRequired();
 
@@ -38,12 +41,11 @@ public class ChargeConfiguration : IEntityTypeConfiguration<Charge>
             x.BuildingId,
             x.PeriodYear,
             x.PeriodMonth
-        })
-        .IsUnique();
+        });
 
-        builder.HasOne<BuildingHub.Modules.Community.Domain.Entities.Building>()
-            .WithMany()
-            .HasForeignKey(x => x.BuildingId)
-            .OnDelete(DeleteBehavior.Cascade);
+        //builder.HasOne<BuildingHub.Modules.Community.Domain.Entities.Building>()
+        //    .WithMany()
+        //    .HasForeignKey(x => x.BuildingId)
+        //    .OnDelete(DeleteBehavior.Cascade);
     }
 }

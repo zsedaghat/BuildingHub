@@ -1,4 +1,5 @@
-﻿using BuildingHub.SharedKernel.Domain;
+﻿
+using BuildingHub.SharedKernel.Domain;
 
 namespace BuildingHub.Modules.Accounting.Domain.Entities;
 
@@ -11,6 +12,12 @@ public enum ChargeCalculationMethod
     Custom = 5
 }
 
+public enum ChargeCategory
+{
+    MonthlyCharge = 1,
+    AdditionalExpense = 2
+}
+
 public class Charge : Entity
 {
     public Guid BuildingId { get; private set; }
@@ -20,6 +27,8 @@ public class Charge : Entity
     public decimal TotalAmount { get; private set; }
 
     public ChargeCalculationMethod CalculationMethod { get; private set; }
+
+    public ChargeCategory Category { get; private set; }
 
     public int PeriodYear { get; private set; }
 
@@ -36,6 +45,7 @@ public class Charge : Entity
         string title,
         decimal totalAmount,
         ChargeCalculationMethod calculationMethod,
+        ChargeCategory category,
         int periodYear,
         int periodMonth)
     {
@@ -43,6 +53,7 @@ public class Charge : Entity
         Title = title;
         TotalAmount = totalAmount;
         CalculationMethod = calculationMethod;
+        Category = category;
         PeriodYear = periodYear;
         PeriodMonth = periodMonth;
         CreatedAt = DateTime.UtcNow;
@@ -53,6 +64,7 @@ public class Charge : Entity
         string title,
         decimal totalAmount,
         ChargeCalculationMethod calculationMethod,
+        ChargeCategory category,
         int periodYear,
         int periodMonth)
     {
@@ -66,7 +78,13 @@ public class Charge : Entity
             throw new ArgumentException(
                 "Total amount must be greater than zero.");
 
-        if (periodYear < 2000)
+        if (!Enum.IsDefined(calculationMethod))
+            throw new ArgumentException("Invalid calculation method.");
+
+        if (!Enum.IsDefined(category))
+            throw new ArgumentException("Invalid charge category.");
+
+        if (periodYear < 1300 || periodYear > 1500)
             throw new ArgumentException("Invalid period year.");
 
         if (periodMonth < 1 || periodMonth > 12)
@@ -77,6 +95,7 @@ public class Charge : Entity
             title,
             totalAmount,
             calculationMethod,
+            category,
             periodYear,
             periodMonth);
     }
@@ -85,6 +104,7 @@ public class Charge : Entity
         string title,
         decimal totalAmount,
         ChargeCalculationMethod calculationMethod,
+        ChargeCategory category,
         int periodYear,
         int periodMonth)
     {
@@ -95,7 +115,13 @@ public class Charge : Entity
             throw new ArgumentException(
                 "Total amount must be greater than zero.");
 
-        if (periodYear < 2000)
+        if (!Enum.IsDefined(calculationMethod))
+            throw new ArgumentException("Invalid calculation method.");
+
+        if (!Enum.IsDefined(category))
+            throw new ArgumentException("Invalid charge category.");
+
+        if (periodYear < 1300 || periodYear > 1500)
             throw new ArgumentException("Invalid period year.");
 
         if (periodMonth < 1 || periodMonth > 12)
@@ -104,6 +130,7 @@ public class Charge : Entity
         Title = title;
         TotalAmount = totalAmount;
         CalculationMethod = calculationMethod;
+        Category = category;
         PeriodYear = periodYear;
         PeriodMonth = periodMonth;
     }

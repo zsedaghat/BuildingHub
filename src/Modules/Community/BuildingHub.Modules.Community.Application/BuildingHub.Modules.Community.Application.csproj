@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="14.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BuildingHub.Modules.Community.Domain\BuildingHub.Modules.Community.Domain.csproj" />
     <ProjectReference Include="..\..\..\BuildingHub.SharedKernel\BuildingHub.SharedKernel.csproj" />
   </ItemGroup>

@@ -138,6 +138,12 @@ builder.Services.AddScoped<IChargeRepository, ChargeRepository>();
 builder.Services.AddScoped<IUnitChargeRepository, UnitChargeRepository>();
 
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+
+builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
+
+
+builder.Services.AddScoped<IChargeExpenseRepository, ChargeExpenseRepository>();
+
 #endregion
 
 builder.Services.AddScoped<

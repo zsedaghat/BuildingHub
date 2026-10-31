@@ -62,6 +62,72 @@ namespace BuildingHub.Modules.Accounting.Infrastructure.Migrations
                     b.ToTable("Charges", (string)null);
                 });
 
+            modelBuilder.Entity("BuildingHub.Modules.Accounting.Domain.Entities.ChargeExpense", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("AllocatedAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<Guid>("ChargeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ExpenseId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChargeId");
+
+                    b.HasIndex("ExpenseId");
+
+                    b.HasIndex("ExpenseId", "ChargeId")
+                        .IsUnique();
+
+                    b.ToTable("ChargeExpenses", (string)null);
+                });
+
+            modelBuilder.Entity("BuildingHub.Modules.Accounting.Domain.Entities.Expense", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<Guid>("BuildingId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<DateOnly>("ExpenseDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BuildingId");
+
+                    b.ToTable("Expenses", (string)null);
+                });
+
             modelBuilder.Entity("BuildingHub.Modules.Accounting.Domain.Entities.Payment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -83,6 +149,10 @@ namespace BuildingHub.Modules.Accounting.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TrackingNumber")
+                        .IsUnique()
+                        .HasFilter("\"TrackingNumber\" IS NOT NULL AND btrim(\"TrackingNumber\") <> ''");
 
                     b.HasIndex("UnitChargeId");
 
@@ -114,6 +184,21 @@ namespace BuildingHub.Modules.Accounting.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("UnitCharges", (string)null);
+                });
+
+            modelBuilder.Entity("BuildingHub.Modules.Accounting.Domain.Entities.ChargeExpense", b =>
+                {
+                    b.HasOne("BuildingHub.Modules.Accounting.Domain.Entities.Charge", null)
+                        .WithMany()
+                        .HasForeignKey("ChargeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BuildingHub.Modules.Accounting.Domain.Entities.Expense", null)
+                        .WithMany()
+                        .HasForeignKey("ExpenseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BuildingHub.Modules.Accounting.Domain.Entities.Payment", b =>

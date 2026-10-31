@@ -16,6 +16,10 @@ public class AccountingDbContext : DbContext
     public DbSet<UnitCharge> UnitCharges => Set<UnitCharge>();
     public DbSet<Payment> Payments => Set<Payment>();
 
+    public DbSet<Expense> Expenses => Set<Expense>();
+
+    public DbSet<ChargeExpense> ChargeExpenses => Set<ChargeExpense>();
+
     protected override void OnModelCreating(
         ModelBuilder modelBuilder)
     {
@@ -27,6 +31,13 @@ public class AccountingDbContext : DbContext
         modelBuilder.ApplyConfiguration(
             new UnitChargeConfiguration());
 
-        modelBuilder.ApplyConfiguration(new PaymentConfiguration());
+        modelBuilder.ApplyConfiguration(
+            new PaymentConfiguration());
+
+        modelBuilder.ApplyConfiguration(
+    new ExpenseConfiguration());
+
+        modelBuilder.ApplyConfiguration(
+    new ChargeExpenseConfiguration());
     }
 }

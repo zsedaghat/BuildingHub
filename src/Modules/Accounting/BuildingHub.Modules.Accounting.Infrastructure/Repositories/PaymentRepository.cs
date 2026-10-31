@@ -50,6 +50,22 @@ public sealed class PaymentRepository : Repository<Payment>, IPaymentRepository
             throw new ArgumentException(
                 "Payment amount must be greater than zero.");
 
+        if (!string.IsNullOrWhiteSpace(trackingNumber))
+        {
+            var normalizedTrackingNumber = trackingNumber.Trim();
+
+            var trackingNumberExists = await Context.Payments
+                .AnyAsync(
+                    payment => payment.TrackingNumber == normalizedTrackingNumber,
+                    cancellationToken);
+
+            if (trackingNumberExists)
+                throw new InvalidOperationException(
+                    "A payment with this tracking number already exists.");
+
+            trackingNumber = normalizedTrackingNumber;
+        }
+
         await using var transaction =
             await Context.Database.BeginTransactionAsync(cancellationToken);
 

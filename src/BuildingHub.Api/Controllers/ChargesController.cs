@@ -1,4 +1,5 @@
 ﻿
+using BuildingHub.Modules.Accounting.Application.Charges.CalculateCustomUnitCharges;
 using BuildingHub.Modules.Accounting.Application.Charges.CalculateUnitCharges;
 using BuildingHub.Modules.Accounting.Application.Charges.Create;
 using BuildingHub.Modules.Accounting.Application.Charges.GetAll;
@@ -130,6 +131,38 @@ public sealed class ChargesController : ControllerBase
     }
 
 
+    [HttpPost("{chargeId:guid}/calculate-custom")]
+    public async Task<IActionResult> CalculateCustom(
+        Guid buildingId,
+        Guid chargeId,
+        [FromBody] CalculateCustomUnitChargesRequest request,
+        CancellationToken cancellationToken)
+    {
+        var charges = await _sender.Send(
+            new GetChargesQuery(buildingId),
+            cancellationToken);
+
+        if (!charges.Any(x => x.Id == chargeId))
+            return NotFound(new
+            {
+                message = "Charge was not found in this building."
+            });
+
+        var command = new CalculateCustomUnitChargesCommand(
+            chargeId,
+            request.Units.Select(x =>
+                new CustomUnitAmount(x.UnitId, x.Amount)).ToList());
+
+        var count = await _sender.Send(command, cancellationToken);
+
+        return Ok(new
+        {
+            chargeId,
+            calculatedUnits = count,
+            message = "Custom unit charges calculated successfully."
+        });
+    }
+
 
 }
 
@@ -140,6 +173,15 @@ public sealed record CreateChargeRequest(
     BuildingHub.Modules.Accounting.Domain.Entities.ChargeCategory Category,
     int PeriodYear,
     int PeriodMonth);
+
+
+public sealed record CustomUnitAmountRequest(
+    Guid UnitId,
+    decimal Amount);
+
+public sealed record CalculateCustomUnitChargesRequest(
+    List<CustomUnitAmountRequest> Units);
+
 
 
 

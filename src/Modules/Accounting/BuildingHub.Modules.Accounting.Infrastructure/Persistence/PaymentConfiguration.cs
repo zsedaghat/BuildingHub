@@ -32,5 +32,9 @@ public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasIndex(x => x.UnitChargeId);
+
+        builder.HasIndex(x => x.TrackingNumber)
+    .IsUnique()
+    .HasFilter("\"TrackingNumber\" IS NOT NULL AND btrim(\"TrackingNumber\") <> ''");
     }
 }

@@ -3,6 +3,7 @@ using BuildingHub.Modules.Accounting.Application.Charges.CalculateCustomUnitChar
 using BuildingHub.Modules.Accounting.Application.Charges.CalculateUnitCharges;
 using BuildingHub.Modules.Accounting.Application.Charges.Create;
 using BuildingHub.Modules.Accounting.Application.Charges.GetAll;
+using BuildingHub.Modules.Accounting.Application.Charges.GetBuildingUnitBalances;
 using BuildingHub.Modules.Accounting.Application.Charges.GetUnitChargeBalances;
 using BuildingHub.Modules.Accounting.Application.Charges.GetUnitCharges;
 using MediatR;
@@ -162,6 +163,20 @@ public sealed class ChargesController : ControllerBase
             message = "Custom unit charges calculated successfully."
         });
     }
+
+
+    [HttpGet("/api/buildings/{buildingId:guid}/unit-balances")]
+    public async Task<IActionResult> GetBuildingUnitBalances(
+        Guid buildingId,
+        CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(
+            new GetBuildingUnitBalancesQuery(buildingId),
+            cancellationToken);
+
+        return Ok(result);
+    }
+
 
 
 }

@@ -16,4 +16,11 @@ public interface IUnitChargeRepository : IRepository<UnitCharge>
     Task AddRangeAsync(
         IEnumerable<UnitCharge> unitCharges,
         CancellationToken cancellationToken = default);
+
+
+    Task<IReadOnlyList<UnitChargeBalanceSummary>>
+        GetBuildingBalanceSummariesAsync(
+            Guid buildingId,
+            CancellationToken cancellationToken = default);
+
 }

@@ -33,6 +33,8 @@ public class UnitChargeConfiguration
             x.UnitId
         }).IsUnique();
 
+        builder.HasIndex(x => x.UnitId);
+
         builder.HasOne<Charge>()
             .WithMany()
             .HasForeignKey(x => x.ChargeId)

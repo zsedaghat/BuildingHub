@@ -180,6 +180,8 @@ namespace BuildingHub.Modules.Accounting.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UnitId");
+
                     b.HasIndex("ChargeId", "UnitId")
                         .IsUnique();
 

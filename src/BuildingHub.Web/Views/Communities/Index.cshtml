@@ -1,0 +1,20 @@
+@model BuildingHub.Web.Models.Pagination.PagedListViewModel<BuildingHub.Web.Models.Communities.CommunityListItemViewModel>
+@{ ViewData["Title"] = "مدیریت جامعه‌ها"; }
+<partial name="_CommunityStyles" />
+<div class="container-xxl flex-grow-1 container-p-y bh-page">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div class="bh-page-heading"><span class="bh-heading-icon"><i class="bx bx-buildings"></i></span><div><h4 class="bh-title mb-1">مدیریت جامعه‌ها</h4><p class="bh-subtitle mb-0">مجموعه‌ها و مجتمع‌های تحت مدیریت را ثبت و مدیریت کنید.</p></div></div>
+        <a asp-action="Create" class="btn btn-primary"><i class="bx bx-plus me-1"></i> افزودن جامعه جدید</a>
+    </div>
+    @if (TempData["SuccessMessage"] is string success) { <div class="alert alert-success alert-dismissible" role="alert"><i class="bx bx-check-circle me-1"></i> @success<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div> }
+    @if (TempData["ErrorMessage"] is string error) { <div class="alert alert-danger alert-dismissible" role="alert">@error<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div> }
+    @if (ViewBag.Error is string pageError) { <div class="alert alert-danger" role="alert">@(pageError)</div> }
+    <div class="card bh-card">
+        <div class="bh-card-header"><div class="d-flex align-items-center gap-2"><i class="bx bx-list-ul fs-4" style="color:#696cff"></i><h5 class="bh-card-title">فهرست جامعه‌ها</h5></div><span class="badge bg-label-primary rounded-pill px-3 py-2"><i class="bx bx-buildings me-1"></i> @Model.TotalCount جامعه</span></div>
+        <div class="table-responsive"><table class="table table-hover bh-table mb-0"><thead><tr><th>نام جامعه</th><th>توضیحات</th><th class="text-center">عملیات</th></tr></thead><tbody>
+        @if (Model.Items.Count > 0) { foreach (var item in Model.Items) { <tr><td><span class="bh-item-name"><i class="bx bx-building-house me-1"></i>@item.Name</span></td><td>@(string.IsNullOrWhiteSpace(item.Description) ? "—" : item.Description)</td><td class="text-center"><div class="d-inline-flex gap-2"><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-icon btn-outline-primary" title="ویرایش"><i class="bx bx-edit-alt"></i></a><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-icon btn-outline-danger" title="حذف"><i class="bx bx-trash"></i></a></div></td></tr> } }
+        else { <tr><td colspan="3" class="text-center bh-empty"><i class="bx bx-buildings fs-1 d-block mb-2"></i><strong class="d-block mb-1">هنوز جامعه‌ای ثبت نشده است</strong><span>برای شروع، اولین جامعه را اضافه کنید.</span></td></tr> }
+        </tbody></table></div>
+        @await Html.PartialAsync("_Pagination", Model)
+    </div>
+</div>

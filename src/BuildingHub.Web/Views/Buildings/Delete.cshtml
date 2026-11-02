@@ -1,0 +1,45 @@
+@model BuildingHub.Web.Models.Buildings.BuildingListItemViewModel
+
+@{
+    ViewData["Title"] = "حذف ساختمان";
+}
+
+<partial name="_BuildingStyles" />
+
+<div class="container-xxl flex-grow-1 container-p-y bh-page">
+    <div class="bh-page-heading mb-4">
+        <span class="bh-heading-icon" style="background:#ffe5e5;color:#ff3e1d"><i class="bx bx-trash"></i></span>
+        <div>
+            <h4 class="bh-title mb-1">حذف ساختمان</h4>
+            <p class="bh-subtitle mb-0">پیش از تأیید، مشخصات ساختمان را بررسی کنید.</p>
+        </div>
+    </div>
+
+    <div class="card bh-card bh-form-card" style="border-top:3px solid #ff3e1d">
+        <div class="card-header d-flex align-items-center gap-2" style="background:#fff5f5;border-color:#ffe1e1">
+            <i class="bx bx-error-circle fs-4 text-danger"></i>
+            <h5 class="mb-0 text-danger fw-bold">تأیید نهایی حذف</h5>
+        </div>
+        <div class="card-body p-4">
+            <div class="alert alert-danger d-flex gap-2 align-items-start" role="alert">
+                <i class="bx bx-error fs-4"></i>
+                <div><strong>توجه!</strong> آیا از حذف این ساختمان مطمئن هستید؟ این عملیات قابل بازگشت نیست.</div>
+            </div>
+
+            <dl class="row mb-4">
+                <dt class="col-sm-3 text-muted">نام ساختمان</dt>
+                <dd class="col-sm-9 fw-bold">@Model.Name</dd>
+                <dt class="col-sm-3 text-muted">توضیحات</dt>
+                <dd class="col-sm-9">@(string.IsNullOrWhiteSpace(Model.Description) ? "—" : Model.Description)</dd>
+                <dt class="col-sm-3 text-muted">شناسه جامعه</dt>
+                <dd class="col-sm-9"><small>@Model.CommunityId</small></dd>
+            </dl>
+
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-danger"><i class="bx bx-trash me-1"></i> بله، حذف شود</button>
+                <a asp-action="Index" class="btn btn-outline-secondary"><i class="bx bx-x me-1"></i> انصراف</a>
+            </form>
+        </div>
+    </div>
+</div>

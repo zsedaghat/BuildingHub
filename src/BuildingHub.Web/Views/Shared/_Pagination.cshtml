@@ -1,0 +1,67 @@
+@model dynamic
+@{
+    var pageNumber = (int)Model.PageNumber;
+    var pageSize = (int)Model.PageSize;
+    var totalCount = (int)Model.TotalCount;
+    var totalPages = (int)Model.TotalPages;
+    var firstItem = (int)Model.FirstItemNumber;
+    var lastItem = (int)Model.LastItemNumber;
+    var hasPrevious = (bool)Model.HasPreviousPage;
+    var hasNext = (bool)Model.HasNextPage;
+    var action = (string)ViewContext.RouteData.Values["action"]!;
+    var controller = (string)ViewContext.RouteData.Values["controller"]!;
+}
+<style>
+    /* Keep the Bootstrap dropdown indicator clear of the selected page-size number in RTL. */
+    .bh-pagination-size {
+        direction: rtl;
+        text-align: center;
+        width: 76px;
+        min-width: 76px;
+        padding-right: .5rem !important;
+        padding-left: 1.9rem !important;
+        background-position: left .5rem center !important;
+        background-origin: border-box !important;
+    }
+</style>
+@if (totalCount > 0)
+{
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 px-4 py-3 border-top">
+        <div class="d-flex align-items-center gap-2 text-muted small">
+            <span>نمایش @firstItem تا @lastItem از @totalCount مورد</span>
+            <form method="get" asp-controller="@controller" asp-action="@action" class="d-flex align-items-center gap-2">
+                <input type="hidden" name="pageNumber" value="1" />
+                <label for="pageSize" class="text-nowrap">تعداد در صفحه</label>
+                <select id="pageSize" name="pageSize" class="form-select form-select-sm bh-pagination-size" onchange="this.form.submit()">
+                    @foreach (var size in new[] { 10, 20, 50, 100 })
+                    {
+                        <option value="@size" selected="@(pageSize == size)">@size</option>
+                    }
+                </select>
+            </form>
+        </div>
+        @if (totalPages > 1)
+        {
+            <nav aria-label="صفحه‌بندی">
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item @(!hasPrevious ? "disabled" : "")">
+                        <a class="page-link" asp-controller="@controller" asp-action="@action" asp-route-pageNumber="@(pageNumber - 1)" asp-route-pageSize="@pageSize" aria-label="صفحه قبل">قبلی</a>
+                    </li>
+                    @for (var pageIndex = Math.Max(1, pageNumber - 2); pageIndex <= Math.Min(totalPages, pageNumber + 2); pageIndex++)
+                    {
+                        <li class="page-item @(pageIndex == pageNumber ? "active" : "")">
+                            <a class="page-link" asp-controller="@controller" asp-action="@action" asp-route-pageNumber="@pageIndex" asp-route-pageSize="@pageSize">@pageIndex</a>
+                        </li>
+                    }
+                    <li class="page-item @(!hasNext ? "disabled" : "")">
+                        <a class="page-link" asp-controller="@controller" asp-action="@action" asp-route-pageNumber="@(pageNumber + 1)" asp-route-pageSize="@pageSize" aria-label="صفحه بعد">بعدی</a>
+                    </li>
+                </ul>
+            </nav>
+        }
+    </div>
+}
+else
+{
+    <div class="px-4 py-3 border-top text-muted small">هیچ موردی برای نمایش وجود ندارد.</div>
+}

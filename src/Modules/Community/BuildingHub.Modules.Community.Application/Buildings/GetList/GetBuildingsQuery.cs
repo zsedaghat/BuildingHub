@@ -1,3 +1,3 @@
-﻿namespace BuildingHub.Modules.Community.Application.Buildings.GetList;
+namespace BuildingHub.Modules.Community.Application.Buildings.GetList;
 
-public sealed record GetBuildingsQuery;
+public sealed record GetBuildingsQuery(int PageNumber = 1, int PageSize = 10);

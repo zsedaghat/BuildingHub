@@ -1,4 +1,4 @@
-﻿using BuildingHub.Modules.Community.Application.Communities;
+using BuildingHub.Modules.Community.Application.Communities;
 using BuildingHub.Modules.Community.Application.Communities.Create;
 using BuildingHub.Modules.Community.Application.Communities.GetList;
 using BuildingHub.Modules.Community.Application.Communities.GetById;
@@ -48,12 +48,19 @@ public class CommunitiesController : ControllerBase
     // GET ALL
     [HttpGet]
     public async Task<IActionResult> GetAll(
+        [FromQuery] int? pageNumber,
+        [FromQuery] int? pageSize,
         CancellationToken cancellationToken)
     {
-        var result = await _getCommunitiesHandler.Handle(
-            new GetCommunitiesQuery(),
-            cancellationToken);
+        // Backward compatibility for existing clients that still expect a plain array.
+        if (pageNumber is null && pageSize is null)
+        {
+            var all = await _getCommunitiesHandler.HandleAll(cancellationToken);
+            return Ok(all);
+        }
 
+        var result = await _getCommunitiesHandler.Handle(
+            new GetCommunitiesQuery(pageNumber ?? 1, pageSize ?? 10), cancellationToken);
         return Ok(result);
     }
 

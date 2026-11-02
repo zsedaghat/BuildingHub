@@ -1,0 +1,65 @@
+@model BuildingHub.Web.Models.Buildings.BuildingFormViewModel
+
+@{
+    ViewData["Title"] = "ویرایش ساختمان";
+}
+
+<partial name="_BuildingStyles" />
+
+<div class="container-xxl flex-grow-1 container-p-y bh-page">
+    <div class="bh-page-heading mb-4">
+        <span class="bh-heading-icon"><i class="bx bx-edit-alt"></i></span>
+        <div>
+            <h4 class="bh-title mb-1">ویرایش ساختمان</h4>
+            <p class="bh-subtitle mb-0">اطلاعات ثبت‌شده ساختمان را به‌روزرسانی کنید.</p>
+        </div>
+    </div>
+
+    <div class="card bh-card bh-form-card">
+        <div class="card-header d-flex align-items-center gap-2">
+            <i class="bx bx-building-house fs-4" style="color:#696cff"></i>
+            <h5 class="bh-card-title mb-0">مشخصات ساختمان</h5>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                @Html.AntiForgeryToken()
+                <input asp-for="Id" type="hidden" />
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">نام ساختمان <span class="text-danger">*</span></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label">توضیحات</label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">جامعه</label>
+                    <input value="@Model.CommunityName" class="form-control" readonly />
+                    <div class="form-text"><i class="bx bx-info-circle me-1"></i> جامعه‌ی ساختمان در ویرایش قابل تغییر نیست.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="DisplayOrder" class="form-label">ترتیب نمایش</label>
+                    <input asp-for="DisplayOrder" type="number" min="0" class="form-control" />
+                    <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+                </div>
+
+                <hr class="my-4" />
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="submit" class="btn btn-primary"><i class="bx bx-save me-1"></i> ذخیره تغییرات</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary"><i class="bx bx-arrow-back me-1"></i> انصراف</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

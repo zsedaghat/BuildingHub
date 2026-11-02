@@ -1,4 +1,4 @@
-﻿using BuildingHub.Modules.Community.Application.Buildings.Create;
+using BuildingHub.Modules.Community.Application.Buildings.Create;
 using BuildingHub.Modules.Community.Application.Buildings.GetList;
 using BuildingHub.Modules.Community.Application.Buildings.GetById;
 using BuildingHub.Modules.Community.Application.Buildings.Update;
@@ -50,12 +50,19 @@ public class BuildingsController : ControllerBase
     // GET ALL
     [HttpGet]
     public async Task<IActionResult> GetAll(
+        [FromQuery] int? pageNumber,
+        [FromQuery] int? pageSize,
         CancellationToken cancellationToken)
     {
-        var result = await _getBuildingsHandler.Handle(
-            new GetBuildingsQuery(),
-            cancellationToken);
+        // Backward compatibility for existing clients that still expect a plain array.
+        if (pageNumber is null && pageSize is null)
+        {
+            var all = await _getBuildingsHandler.HandleAll(cancellationToken);
+            return Ok(all);
+        }
 
+        var result = await _getBuildingsHandler.Handle(
+            new GetBuildingsQuery(pageNumber ?? 1, pageSize ?? 10), cancellationToken);
         return Ok(result);
     }
 

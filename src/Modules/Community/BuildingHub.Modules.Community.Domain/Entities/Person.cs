@@ -1,4 +1,6 @@
-﻿using BuildingHub.SharedKernel.Domain;
+﻿using BuildingHub.Modules.Community.Domain.ValueObjects;
+using BuildingHub.SharedKernel.Domain;
+using System.Reflection;
 
 namespace BuildingHub.Modules.Community.Domain.Entities;
 
@@ -16,6 +18,7 @@ public class Person : Entity
 
     private Person()
     {
+       
     }
 
     private Person(
@@ -27,7 +30,7 @@ public class Person : Entity
     {
         FirstName = firstName;
         LastName = lastName;
-        Mobile = mobile;
+        Mobile = MobileNumberNormalizer.Normalize(mobile);
         Email = email;
         NationalId = nationalId;
     }

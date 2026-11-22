@@ -1,0 +1,11 @@
+@model BuildingHub.Web.Models.Units.UnitListItemViewModel
+@{ ViewData["Title"] = "حذف واحد"; }
+<partial name="_BuildingStyles" />
+<div class="container-xxl flex-grow-1 container-p-y bh-page">
+    <div class="bh-page-heading mb-4"><span class="bh-heading-icon" style="background:#fff0f0;color:#dc3545"><i class="bx bx-trash"></i></span><div><h4 class="bh-title mb-1">حذف واحد</h4><p class="bh-subtitle mb-0">پیش از حذف، اطلاعات واحد را بررسی کنید.</p></div></div>
+    <div class="card bh-card bh-form-card"><div class="card-body p-4">
+        <div class="alert alert-warning"><i class="bx bx-error-circle me-1"></i> آیا از حذف این واحد مطمئن هستید؟ این عملیات قابل بازگشت نیست و ارتباط ساکنان ثبت‌شده با این واحد نیز حذف خواهد شد.</div>
+        <dl class="row mb-4"><dt class="col-sm-4">شماره واحد</dt><dd class="col-sm-8">@Model.UnitNumber</dd><dt class="col-sm-4">ساختمان</dt><dd class="col-sm-8">@Model.BuildingName</dd><dt class="col-sm-4">طبقه</dt><dd class="col-sm-8">@Model.FloorName</dd><dt class="col-sm-4">نوع واحد</dt><dd class="col-sm-8">@Model.TypeName</dd><dt class="col-sm-4">متراژ</dt><dd class="col-sm-8">@(Model.Area.HasValue ? $"{Model.Area.Value:0.##} مترمربع" : "—")</dd></dl>
+        <form asp-action="Delete" asp-route-id="@Model.Id" method="post">@Html.AntiForgeryToken()<button type="submit" class="btn btn-danger"><i class="bx bx-trash me-1"></i> حذف واحد</button><a asp-action="Index" class="btn btn-outline-secondary ms-2">انصراف</a></form>
+    </div></div>
+</div>

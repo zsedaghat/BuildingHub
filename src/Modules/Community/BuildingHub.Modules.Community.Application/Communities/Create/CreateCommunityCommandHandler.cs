@@ -1,4 +1,5 @@
-﻿using BuildingHub.Modules.Community.Application.Abstractions;
+﻿
+using BuildingHub.Modules.Community.Application.Abstractions;
 using CommunityEntity =
     BuildingHub.Modules.Community.Domain.Entities.Community;
 
@@ -8,7 +9,8 @@ public sealed class CreateCommunityCommandHandler
 {
     private readonly ICommunityRepository _repository;
 
-    public CreateCommunityCommandHandler(ICommunityRepository repository)
+    public CreateCommunityCommandHandler(
+        ICommunityRepository repository)
     {
         _repository = repository;
     }

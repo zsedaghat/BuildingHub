@@ -1,5 +1,5 @@
 ﻿using BuildingHub.Modules.Community.Application.Abstractions;
-
+using BuildingHub.Modules.Community.Domain.ValueObjects;
 using PersonEntity =
     BuildingHub.Modules.Community.Domain.Entities.Person;
 
@@ -19,8 +19,11 @@ public sealed class CreatePersonCommandHandler
         CreatePersonCommand command,
         CancellationToken cancellationToken = default)
     {
+        var normalizedMobile =
+    MobileNumberNormalizer.Normalize(command.Mobile);
+
         var existingPerson = await _repository.GetByMobileAsync(
-            command.Mobile,
+            normalizedMobile,
             cancellationToken);
 
         if (existingPerson is not null)
@@ -30,7 +33,7 @@ public sealed class CreatePersonCommandHandler
         var person = PersonEntity.Create(
             command.FirstName,
             command.LastName,
-            command.Mobile,
+            normalizedMobile,
             command.Email,
             command.NationalId);
 
@@ -42,7 +45,7 @@ public sealed class CreatePersonCommandHandler
             person.Id,
             person.FirstName,
             person.LastName,
-            person.Mobile,
+           normalizedMobile,
             person.Email,
             person.NationalId);
     }

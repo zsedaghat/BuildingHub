@@ -1,0 +1,19 @@
+@model BuildingHub.Web.Models.Units.UnitFormViewModel
+@{ ViewData["Title"] = "ویرایش واحد"; }
+<partial name="_BuildingStyles" />
+<div class="container-xxl flex-grow-1 container-p-y bh-page">
+    <div class="bh-page-heading mb-4"><span class="bh-heading-icon"><i class="bx bx-edit"></i></span><div><h4 class="bh-title mb-1">ویرایش واحد</h4><p class="bh-subtitle mb-0">مشخصات قابل ویرایش واحد را اصلاح کنید.</p></div></div>
+    <div class="card bh-card bh-form-card"><div class="card-header d-flex align-items-center gap-2"><i class="bx bx-home-alt fs-4" style="color:#696cff"></i><h5 class="bh-card-title mb-0">اطلاعات واحد</h5></div><div class="card-body p-4">
+        <form asp-action="Edit" asp-route-id="@Model.Id" method="post">@Html.AntiForgeryToken()<input asp-for="Id" type="hidden" /><input asp-for="BuildingId" type="hidden" /><div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <div class="row g-3">
+                <div class="col-md-6"><label class="form-label">ساختمان</label><input class="form-control" value="@Model.BuildingName" readonly /><div class="form-text">ساختمان واحد پس از ایجاد قابل تغییر نیست.</div></div>
+                <div class="col-md-6"><label class="form-label">طبقه</label><input class="form-control" value="@Model.FloorName" readonly /><div class="form-text">طبقه واحد پس از ایجاد قابل تغییر نیست.</div></div>
+                <div class="col-md-6"><label asp-for="UnitNumber" class="form-label">شماره واحد <span class="text-danger">*</span></label><input asp-for="UnitNumber" class="form-control" /><span asp-validation-for="UnitNumber" class="text-danger"></span></div>
+                <div class="col-md-6"><label asp-for="Type" class="form-label">نوع واحد</label><select asp-for="Type" asp-items="Model.UnitTypes" class="form-select"></select><span asp-validation-for="Type" class="text-danger"></span></div>
+                <div class="col-md-6"><label asp-for="Area" class="form-label">متراژ (مترمربع)</label><input asp-for="Area" type="number" min="0.01" step="0.01" class="form-control" /><span asp-validation-for="Area" class="text-danger"></span></div>
+            </div>
+            <hr class="my-4" /><div class="d-flex flex-wrap gap-2"><button type="submit" class="btn btn-primary"><i class="bx bx-save me-1"></i> ذخیره تغییرات</button><a asp-action="Index" class="btn btn-outline-secondary"><i class="bx bx-arrow-back me-1"></i> بازگشت به فهرست</a></div>
+        </form>
+    </div></div>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

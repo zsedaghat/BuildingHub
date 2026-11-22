@@ -19,6 +19,17 @@ public sealed class CreateFloorCommandHandler
         CreateFloorCommand command,
         CancellationToken cancellationToken = default)
     {
+        var floorNumberExists = await _repository.ExistsAsync(
+            command.BuildingId,
+            command.FloorNumber,
+            cancellationToken: cancellationToken);
+
+        if (floorNumberExists)
+        {
+            throw new InvalidOperationException(
+                "این شماره طبقه قبلاً برای این ساختمان ثبت شده است. لطفاً شماره دیگری انتخاب کنید.");
+        }
+
         var floor = FloorEntity.Create(
             command.BuildingId,
             command.Name,

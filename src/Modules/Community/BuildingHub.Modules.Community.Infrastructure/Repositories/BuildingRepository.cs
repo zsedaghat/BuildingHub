@@ -1,4 +1,4 @@
-using BuildingHub.Modules.Community.Application.Abstractions;
+﻿using BuildingHub.Modules.Community.Application.Abstractions;
 using BuildingHub.Modules.Community.Domain.Entities;
 using BuildingHub.Modules.Community.Infrastructure.Persistence;
 using BuildingHub.SharedKernel.Common.Pagination;
@@ -20,7 +20,7 @@ public sealed class BuildingRepository : Repository<Building>, IBuildingReposito
             .AsNoTracking()
             .Where(x => x.CommunityId == communityId)
             .OrderBy(x => x.DisplayOrder)
-            .ThenBy(x => x.Name)
+            .ThenByDescending(x => x.CreatedAt)
             .ThenBy(x => x.Id)
             .ToListAsync(cancellationToken);
     }
@@ -34,9 +34,10 @@ public sealed class BuildingRepository : Repository<Building>, IBuildingReposito
         var totalCount = await query.CountAsync(cancellationToken);
         var totalPages = totalCount == 0 ? 0 : (int)Math.Ceiling(totalCount / (double)pageSize);
         var effectivePageNumber = totalPages == 0 ? 1 : Math.Min(pageNumber, totalPages);
+
         var items = await query
             .OrderBy(x => x.DisplayOrder)
-            .ThenBy(x => x.Name)
+            .ThenByDescending(x => x.CreatedAt)
             .ThenBy(x => x.Id)
             .Skip((effectivePageNumber - 1) * pageSize)
             .Take(pageSize)

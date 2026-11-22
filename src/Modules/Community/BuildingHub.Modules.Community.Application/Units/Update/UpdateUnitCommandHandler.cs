@@ -1,4 +1,4 @@
-﻿using BuildingHub.Modules.Community.Application.Abstractions;
+using BuildingHub.Modules.Community.Application.Abstractions;
 
 namespace BuildingHub.Modules.Community.Application.Units.Update;
 
@@ -22,8 +22,23 @@ public sealed class UpdateUnitCommandHandler
         if (unit is null)
             return null;
 
+        var unitNumber = command.UnitNumber?.Trim();
+
+        if (string.IsNullOrWhiteSpace(unitNumber))
+            throw new ArgumentException("شماره واحد الزامی است.");
+
+        if (await _repository.ExistsAsync(
+            unit.BuildingId,
+            unitNumber,
+            unit.Id,
+            cancellationToken))
+        {
+            throw new InvalidOperationException(
+                "این شماره واحد قبلاً برای این ساختمان ثبت شده است. لطفاً شماره دیگری انتخاب کنید.");
+        }
+
         unit.Update(
-            command.UnitNumber,
+            unitNumber,
             command.Type,
             command.Area);
 

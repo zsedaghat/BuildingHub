@@ -15,7 +15,6 @@ public class Expense : Entity
 
     public string? Description { get; private set; }
 
-    public DateTime CreatedAt { get; private set; }
 
     private Expense()
     {
@@ -33,7 +32,6 @@ public class Expense : Entity
         Amount = amount;
         ExpenseDate = expenseDate;
         Description = description;
-        CreatedAt = DateTime.UtcNow;
     }
 
     public static Expense Create(

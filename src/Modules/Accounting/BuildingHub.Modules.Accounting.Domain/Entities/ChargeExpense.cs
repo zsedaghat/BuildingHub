@@ -11,7 +11,6 @@ public class ChargeExpense : Entity
 
     public decimal AllocatedAmount { get; private set; }
 
-    public DateTime CreatedAt { get; private set; }
 
     private ChargeExpense()
     {
@@ -25,7 +24,6 @@ public class ChargeExpense : Entity
         ExpenseId = expenseId;
         ChargeId = chargeId;
         AllocatedAmount = allocatedAmount;
-        CreatedAt = DateTime.UtcNow;
     }
 
     public static ChargeExpense Create(

@@ -1,4 +1,4 @@
-﻿using BuildingHub.Modules.Community.Application.Units.Create;
+using BuildingHub.Modules.Community.Application.Units.Create;
 using BuildingHub.Modules.Community.Application.Units.Delete;
 using BuildingHub.Modules.Community.Application.Units.GetByBuildingId;
 using BuildingHub.Modules.Community.Application.Units.GetByFloorId;
@@ -56,10 +56,21 @@ public sealed class UnitsController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetAll(
-        CancellationToken cancellationToken)
+        [FromQuery] int? pageNumber = null,
+        [FromQuery] int? pageSize = null,
+        [FromQuery] Guid? buildingId = null,
+        [FromQuery] Guid? floorId = null,
+        CancellationToken cancellationToken = default)
     {
+        // Keep the old plain-list response for existing clients that do not request pagination.
+        if (pageNumber is null && pageSize is null && buildingId is null && floorId is null)
+        {
+            var all = await _getListHandler.HandleAll(cancellationToken);
+            return Ok(all);
+        }
+
         var result = await _getListHandler.Handle(
-            new GetUnitsQuery(),
+            new GetUnitsQuery(pageNumber ?? 1, pageSize ?? 10, buildingId, floorId),
             cancellationToken);
 
         return Ok(result);

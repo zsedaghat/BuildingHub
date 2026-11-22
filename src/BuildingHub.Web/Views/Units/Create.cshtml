@@ -1,0 +1,42 @@
+@model BuildingHub.Web.Models.Units.UnitFormViewModel
+@{ ViewData["Title"] = "افزودن واحد"; }
+<partial name="_BuildingStyles" />
+<div class="container-xxl flex-grow-1 container-p-y bh-page">
+    <div class="bh-page-heading mb-4"><span class="bh-heading-icon"><i class="bx bx-door-open"></i></span><div><h4 class="bh-title mb-1">افزودن واحد جدید</h4><p class="bh-subtitle mb-0">ساختمان، طبقه و مشخصات واحد را وارد کنید.</p></div></div>
+    <div class="card bh-card bh-form-card"><div class="card-header d-flex align-items-center gap-2"><i class="bx bx-edit fs-4" style="color:#696cff"></i><h5 class="bh-card-title mb-0">اطلاعات واحد</h5></div><div class="card-body p-4">
+        <form asp-action="Create" method="post">@Html.AntiForgeryToken()<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <div class="row g-3">
+                <div class="col-md-6"><label asp-for="BuildingId" class="form-label">ساختمان <span class="text-danger">*</span></label><select asp-for="BuildingId" asp-items="Model.Buildings" class="form-select" id="buildingSelect"><option value="">انتخاب ساختمان</option></select><span asp-validation-for="BuildingId" class="text-danger"></span></div>
+                <div class="col-md-6"><label asp-for="FloorId" class="form-label">طبقه</label><select asp-for="FloorId" asp-items="Model.Floors" class="form-select" id="floorSelect"><option value="">بدون طبقه / انتخاب نشده</option></select><span class="form-text">با انتخاب ساختمان، طبقات همان ساختمان نمایش داده می‌شوند.</span></div>
+                <div class="col-md-6"><label asp-for="UnitNumber" class="form-label">شماره واحد <span class="text-danger">*</span></label><input asp-for="UnitNumber" class="form-control" placeholder="مثلاً ۱۰۱" /><span asp-validation-for="UnitNumber" class="text-danger"></span><div class="form-text">شماره واحد در هر ساختمان باید یکتا باشد.</div></div>
+                <div class="col-md-6"><label asp-for="Type" class="form-label">نوع واحد <span class="text-danger">*</span></label><select asp-for="Type" asp-items="Model.UnitTypes" class="form-select"><option value="">انتخاب نوع واحد</option></select><span asp-validation-for="Type" class="text-danger"></span></div>
+                <div class="col-md-6"><label asp-for="Area" class="form-label">متراژ (مترمربع)</label><input asp-for="Area" type="number" min="0.01" step="0.01" class="form-control" placeholder="مثلاً ۸۵٫۵" /><span asp-validation-for="Area" class="text-danger"></span><div class="form-text">برای پارکینگ یا انباری، در صورت نیاز متراژ را وارد کنید.</div></div>
+            </div>
+            <hr class="my-4" /><div class="d-flex flex-wrap gap-2"><button type="submit" class="btn btn-primary"><i class="bx bx-save me-1"></i> ثبت واحد</button><a asp-action="Index" class="btn btn-outline-secondary"><i class="bx bx-arrow-back me-1"></i> بازگشت به فهرست</a></div>
+        </form>
+    </div></div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (() => {
+            const building = document.getElementById('buildingSelect');
+            const floor = document.getElementById('floorSelect');
+            building?.addEventListener('change', async () => {
+                floor.innerHTML = '<option value="">بدون طبقه / انتخاب نشده</option>';
+                if (!building.value) return;
+                try {
+                    const response = await fetch('@Url.Action("GetFloors", "Units")?buildingId=' + encodeURIComponent(building.value));
+                    if (!response.ok) throw new Error();
+                    const floors = await response.json();
+                    floors.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.id;
+                        option.textContent = `${item.name} (شماره ${item.floorNumber})`;
+                        floor.appendChild(option);
+                    });
+                } catch { floor.innerHTML = '<option value="">خطا در دریافت طبقات</option>'; }
+            });
+        })();
+    </script>
+}

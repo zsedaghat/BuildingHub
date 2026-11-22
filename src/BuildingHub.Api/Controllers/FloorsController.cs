@@ -1,4 +1,4 @@
-﻿using BuildingHub.Modules.Community.Application.Floors.Create;
+using BuildingHub.Modules.Community.Application.Floors.Create;
 using BuildingHub.Modules.Community.Application.Floors.Delete;
 using BuildingHub.Modules.Community.Application.Floors.GetByBuildingId;
 using BuildingHub.Modules.Community.Application.Floors.GetById;
@@ -40,9 +40,7 @@ public sealed class FloorsController : ControllerBase
         [FromBody] CreateFloorCommand command,
         CancellationToken cancellationToken)
     {
-        var result = await _createHandler.Handle(
-            command,
-            cancellationToken);
+        var result = await _createHandler.Handle(command, cancellationToken);
 
         return CreatedAtAction(
             nameof(GetById),
@@ -50,24 +48,30 @@ public sealed class FloorsController : ControllerBase
             result);
     }
 
+    // GET /api/floors?pageNumber=1&pageSize=10
     [HttpGet]
     public async Task<IActionResult> GetAll(
-        CancellationToken cancellationToken)
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        CancellationToken cancellationToken = default)
     {
         var result = await _getListHandler.Handle(
-            new GetFloorsQuery(),
+            new GetFloorsQuery(pageNumber, pageSize),
             cancellationToken);
 
         return Ok(result);
     }
 
+    // GET /api/floors/building/{buildingId}?pageNumber=1&pageSize=10
     [HttpGet("building/{buildingId:guid}")]
     public async Task<IActionResult> GetByBuilding(
         Guid buildingId,
-        CancellationToken cancellationToken)
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        CancellationToken cancellationToken = default)
     {
-        var result = await _getByBuildingHandler.Handle(
-            new GetFloorsByBuildingIdQuery(buildingId),
+        var result = await _getListHandler.Handle(
+            new GetFloorsQuery(pageNumber, pageSize, buildingId),
             cancellationToken);
 
         return Ok(result);
@@ -79,8 +83,7 @@ public sealed class FloorsController : ControllerBase
         CancellationToken cancellationToken)
     {
         var result = await _getByIdHandler.Handle(
-            new GetFloorByIdQuery(id),
-            cancellationToken);
+            new GetFloorByIdQuery(id), cancellationToken);
 
         if (result is null)
             return NotFound();
@@ -97,9 +100,7 @@ public sealed class FloorsController : ControllerBase
         if (id != command.Id)
             return BadRequest("Route id and command id must match.");
 
-        var result = await _updateHandler.Handle(
-            command,
-            cancellationToken);
+        var result = await _updateHandler.Handle(command, cancellationToken);
 
         if (result is null)
             return NotFound();
@@ -113,8 +114,7 @@ public sealed class FloorsController : ControllerBase
         CancellationToken cancellationToken)
     {
         var deleted = await _deleteHandler.Handle(
-            new DeleteFloorCommand(id),
-            cancellationToken);
+            new DeleteFloorCommand(id), cancellationToken);
 
         if (!deleted)
             return NotFound();

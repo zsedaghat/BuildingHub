@@ -4,6 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>770894e0-2ce3-4aa9-9821-f0e4379590f5</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +21,9 @@
     <ProjectReference Include="..\Modules\Accounting\BuildingHub.Modules.Accounting.Application\BuildingHub.Modules.Accounting.Application.csproj" />
     <ProjectReference Include="..\Modules\Accounting\BuildingHub.Modules.Accounting.Infrastructure\BuildingHub.Modules.Accounting.Infrastructure.csproj" />
     <ProjectReference Include="..\Modules\Community\BuildingHub.Modules.Community.Infrastructure\BuildingHub.Modules.Community.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Identity\BuildingHub.Modules.Identity.Infrastructure\BuildingHub.Modules.Identity.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Tenancy\BuildingHub.Modules.Tenancy.Infrastructure\BuildingHub.Modules.Tenancy.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Reference\BuildingHub.Modules.Reference.Infrastructure\BuildingHub.Modules.Reference.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

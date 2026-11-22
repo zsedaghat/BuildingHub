@@ -1,4 +1,6 @@
 ﻿using BuildingHub.Modules.Community.Application.Abstractions;
+using BuildingHub.Modules.Community.Domain.ValueObjects;
+using System.Reflection;
 
 namespace BuildingHub.Modules.Community.Application.Persons.Update;
 
@@ -23,8 +25,11 @@ public sealed class UpdatePersonCommandHandler
         if (person is null)
             return null;
 
+        var normalizedMobile =
+     MobileNumberNormalizer.Normalize(command.Mobile);
+
         var existingPerson = await _repository.GetByMobileAsync(
-            command.Mobile,
+            normalizedMobile,
             cancellationToken);
 
         if (existingPerson is not null &&
@@ -37,7 +42,7 @@ public sealed class UpdatePersonCommandHandler
         person.Update(
             command.FirstName,
             command.LastName,
-            command.Mobile,
+           normalizedMobile,
             command.Email,
             command.NationalId);
 
@@ -49,7 +54,7 @@ public sealed class UpdatePersonCommandHandler
             person.Id,
             person.FirstName,
             person.LastName,
-            person.Mobile,
+           normalizedMobile,
             person.Email,
             person.NationalId);
     }

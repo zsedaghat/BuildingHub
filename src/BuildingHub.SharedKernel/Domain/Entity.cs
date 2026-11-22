@@ -4,8 +4,11 @@ public abstract class Entity
 {
     public Guid Id { get; protected set; }
 
+    public DateTime CreatedAt { get; private set; }
+
     protected Entity()
     {
-        Id = Guid.NewGuid();
+        Id = Guid.CreateVersion7();
+        CreatedAt = DateTime.UtcNow;
     }
 }

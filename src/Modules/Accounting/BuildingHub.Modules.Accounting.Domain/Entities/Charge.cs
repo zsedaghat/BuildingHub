@@ -34,7 +34,6 @@ public class Charge : Entity
 
     public int PeriodMonth { get; private set; }
 
-    public DateTime CreatedAt { get; private set; }
 
     private Charge()
     {
@@ -56,7 +55,7 @@ public class Charge : Entity
         Category = category;
         PeriodYear = periodYear;
         PeriodMonth = periodMonth;
-        CreatedAt = DateTime.UtcNow;
+       
     }
 
     public static Charge Create(

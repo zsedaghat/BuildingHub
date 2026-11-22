@@ -43,9 +43,6 @@ public class ChargeConfiguration : IEntityTypeConfiguration<Charge>
             x.PeriodMonth
         });
 
-        //builder.HasOne<BuildingHub.Modules.Community.Domain.Entities.Building>()
-        //    .WithMany()
-        //    .HasForeignKey(x => x.BuildingId)
-        //    .OnDelete(DeleteBehavior.Cascade);
+      
     }
 }

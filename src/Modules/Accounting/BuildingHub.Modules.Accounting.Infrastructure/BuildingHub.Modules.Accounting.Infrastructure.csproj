@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuildingHub.Modules.Accounting.Application\BuildingHub.Modules.Accounting.Application.csproj" />
-    <ProjectReference Include="..\..\Community\BuildingHub.Modules.Community.Domain\BuildingHub.Modules.Community.Domain.csproj" />
   </ItemGroup>
 
 </Project>

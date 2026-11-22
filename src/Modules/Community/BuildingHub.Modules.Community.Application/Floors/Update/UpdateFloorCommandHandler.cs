@@ -22,6 +22,18 @@ public sealed class UpdateFloorCommandHandler
         if (floor is null)
             return null;
 
+        var floorNumberExists = await _repository.ExistsAsync(
+            floor.BuildingId,
+            command.FloorNumber,
+            floor.Id,
+            cancellationToken);
+
+        if (floorNumberExists)
+        {
+            throw new InvalidOperationException(
+                "این شماره طبقه قبلاً برای این ساختمان ثبت شده است. لطفاً شماره دیگری انتخاب کنید.");
+        }
+
         floor.Update(
             command.Name,
             command.FloorNumber,

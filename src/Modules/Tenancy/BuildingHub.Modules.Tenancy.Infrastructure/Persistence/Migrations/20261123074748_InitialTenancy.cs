@@ -6,11 +6,31 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BuildingHub.Modules.Tenancy.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class AddTenantAccessModel : Migration
+    public partial class InitialTenancy : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "tenancy");
+
+            migrationBuilder.CreateTable(
+                name: "tenant",
+                schema: "tenancy",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    status = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    updated_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    created_at_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tenant", x => x.id);
+                    table.CheckConstraint("ck_tenant_status", "status IN ('Active', 'Suspended', 'Closed')");
+                });
+
             migrationBuilder.CreateTable(
                 name: "tenant_community_assignment",
                 schema: "tenancy",
@@ -122,24 +142,6 @@ namespace BuildingHub.Modules.Tenancy.Infrastructure.Persistence.Migrations
                 columns: new[] { "tenant_id", "user_id" },
                 unique: true,
                 filter: "end_at_utc IS NULL");
-
-
-            migrationBuilder.Sql("""
-    CREATE EXTENSION IF NOT EXISTS btree_gist;
-
-    ALTER TABLE tenancy.tenant_community_assignment
-    ADD CONSTRAINT ex_tenant_community_assignment_no_overlap
-    EXCLUDE USING gist
-    (
-        community_id WITH =,
-        tstzrange(
-            start_at_utc,
-            COALESCE(end_at_utc, 'infinity'::timestamptz),
-            '[)'
-        ) WITH &&
-    );
-    """);
-
         }
 
         /// <inheritdoc />
@@ -155,6 +157,10 @@ namespace BuildingHub.Modules.Tenancy.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "tenant_user_membership",
+                schema: "tenancy");
+
+            migrationBuilder.DropTable(
+                name: "tenant",
                 schema: "tenancy");
         }
     }

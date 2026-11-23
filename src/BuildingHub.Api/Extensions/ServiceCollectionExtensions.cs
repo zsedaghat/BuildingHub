@@ -69,14 +69,27 @@ public static class ServiceCollectionExtensions
             configuration.GetConnectionString("DefaultConnection");
 
         // DbContexts
+
+        // Community
         services.AddDbContext<CommunityDbContext>(options =>
-            options.UseNpgsql(connectionString));
+            options.UseNpgsql(
+                connectionString,
+                npgsql => npgsql.MigrationsHistoryTable(
+                    "__EFMigrationsHistory_Community")));
 
+        // Accounting
         services.AddDbContext<AccountingDbContext>(options =>
-            options.UseNpgsql(connectionString));
+            options.UseNpgsql(
+                connectionString,
+                npgsql => npgsql.MigrationsHistoryTable(
+                    "__EFMigrationsHistory_Accounting")));
 
+        // Tenancy
         services.AddDbContext<TenancyDbContext>(options =>
-            options.UseNpgsql(connectionString));
+            options.UseNpgsql(
+                connectionString,
+                npgsql => npgsql.MigrationsHistoryTable(
+                    "__EFMigrationsHistory_Tenancy")));
 
         services.AddIdentityInfrastructure(connectionString);
         services.AddReferenceInfrastructure(connectionString);

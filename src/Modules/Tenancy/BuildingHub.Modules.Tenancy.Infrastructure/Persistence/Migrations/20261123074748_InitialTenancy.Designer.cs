@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BuildingHub.Modules.Tenancy.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(TenancyDbContext))]
-    [Migration("20261121132105_AddTenantAccessModel")]
-    partial class AddTenantAccessModel
+    [Migration("20261123074748_InitialTenancy")]
+    partial class InitialTenancy
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

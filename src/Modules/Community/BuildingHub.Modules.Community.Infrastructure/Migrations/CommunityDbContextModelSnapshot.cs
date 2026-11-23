@@ -17,6 +17,7 @@ namespace BuildingHub.Modules.Community.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("community")
                 .HasAnnotation("ProductVersion", "10.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -25,205 +26,242 @@ namespace BuildingHub.Modules.Community.Infrastructure.Migrations
             modelBuilder.Entity("BuildingHub.Modules.Community.Domain.Entities.Building", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<Guid>("CommunityId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("community_id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("description");
 
                     b.Property<int>("DisplayOrder")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("display_order");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CommunityId", "Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ux_building_community_name");
 
-                    b.ToTable("Buildings", (string)null);
+                    b.ToTable("building", "community");
                 });
 
             modelBuilder.Entity("BuildingHub.Modules.Community.Domain.Entities.Community", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Communities", (string)null);
+                    b.ToTable("community", "community");
                 });
 
             modelBuilder.Entity("BuildingHub.Modules.Community.Domain.Entities.Floor", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<Guid>("BuildingId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("building_id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("DisplayOrder")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("display_order");
 
                     b.Property<int>("FloorNumber")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("floor_number");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BuildingId", "FloorNumber")
-                        .IsUnique();
+                    b.HasAlternateKey("Id", "BuildingId")
+                        .HasName("ak_floor_id_building_id");
 
-                    b.ToTable("Floors", (string)null);
+                    b.HasIndex("BuildingId", "FloorNumber")
+                        .IsUnique()
+                        .HasDatabaseName("ux_floor_building_floor_number");
+
+                    b.ToTable("floor", "community");
                 });
 
             modelBuilder.Entity("BuildingHub.Modules.Community.Domain.Entities.Person", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
+                        .HasColumnType("character varying(150)")
+                        .HasColumnName("email");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("first_name");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("last_name");
 
                     b.Property<string>("Mobile")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("mobile");
 
                     b.Property<string>("NationalId")
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("national_id");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Mobile")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ux_person_mobile");
 
-                    b.ToTable("Persons", (string)null);
+                    b.ToTable("person", "community");
                 });
 
             modelBuilder.Entity("BuildingHub.Modules.Community.Domain.Entities.Unit", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<decimal?>("Area")
                         .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)");
+                        .HasColumnType("numeric(18,2)")
+                        .HasColumnName("area");
 
                     b.Property<Guid>("BuildingId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("building_id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("FloorId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("floor_id");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
 
                     b.Property<int>("Type")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
 
                     b.Property<string>("UnitNumber")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("unit_number");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BuildingId", "UnitNumber")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ux_unit_building_number");
 
-                    b.ToTable("Units", (string)null);
+                    b.HasIndex("FloorId", "BuildingId");
+
+                    b.ToTable("unit", "community");
                 });
 
             modelBuilder.Entity("BuildingHub.Modules.Community.Domain.Entities.UnitPerson", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateOnly?>("EndDate")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("end_date");
 
                     b.Property<bool>("IsPrimary")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_primary");
 
                     b.Property<Guid>("PersonId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("person_id");
 
                     b.Property<int>("Role")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("role");
 
                     b.Property<DateOnly?>("StartDate")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("start_date");
 
                     b.Property<Guid>("UnitId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("unit_id");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PersonId");
 
                     b.HasIndex("UnitId", "PersonId", "Role")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ux_unit_person_role");
 
-                    b.ToTable("UnitPersons", (string)null);
+                    b.ToTable("unit_person", "community", t =>
+                        {
+                            t.HasCheckConstraint("ck_unit_person_dates", "end_date IS NULL OR start_date IS NULL OR end_date >= start_date");
+                        });
                 });
 
             modelBuilder.Entity("BuildingHub.Modules.Community.Domain.Entities.Building", b =>
@@ -231,8 +269,9 @@ namespace BuildingHub.Modules.Community.Infrastructure.Migrations
                     b.HasOne("BuildingHub.Modules.Community.Domain.Entities.Community", null)
                         .WithMany()
                         .HasForeignKey("CommunityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_building_community");
                 });
 
             modelBuilder.Entity("BuildingHub.Modules.Community.Domain.Entities.Floor", b =>
@@ -240,8 +279,26 @@ namespace BuildingHub.Modules.Community.Infrastructure.Migrations
                     b.HasOne("BuildingHub.Modules.Community.Domain.Entities.Building", null)
                         .WithMany()
                         .HasForeignKey("BuildingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_floor_building");
+                });
+
+            modelBuilder.Entity("BuildingHub.Modules.Community.Domain.Entities.Unit", b =>
+                {
+                    b.HasOne("BuildingHub.Modules.Community.Domain.Entities.Building", null)
+                        .WithMany()
+                        .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_unit_building");
+
+                    b.HasOne("BuildingHub.Modules.Community.Domain.Entities.Floor", null)
+                        .WithMany()
+                        .HasForeignKey("FloorId", "BuildingId")
+                        .HasPrincipalKey("Id", "BuildingId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_unit_floor_building");
                 });
 
             modelBuilder.Entity("BuildingHub.Modules.Community.Domain.Entities.UnitPerson", b =>
@@ -249,14 +306,16 @@ namespace BuildingHub.Modules.Community.Infrastructure.Migrations
                     b.HasOne("BuildingHub.Modules.Community.Domain.Entities.Person", null)
                         .WithMany()
                         .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_unit_person_person");
 
                     b.HasOne("BuildingHub.Modules.Community.Domain.Entities.Unit", null)
                         .WithMany()
                         .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_unit_person_unit");
                 });
 #pragma warning restore 612, 618
         }

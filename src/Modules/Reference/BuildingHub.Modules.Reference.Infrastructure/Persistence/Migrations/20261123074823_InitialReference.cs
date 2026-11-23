@@ -22,24 +22,27 @@ namespace BuildingHub.Modules.Reference.Infrastructure.Persistence.Migrations
                 {
                     code = table.Column<string>(type: "character(3)", fixedLength: true, maxLength: 3, nullable: false),
                     name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    minor_unit_digits = table.Column<byte>(type: "smallint", nullable: false)
+                    minor_unit_digits = table.Column<byte>(type: "smallint", nullable: false),
+                    is_active = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_currency", x => x.code);
-                    table.CheckConstraint("ck_currency_minor_unit_digits", "minor_unit_digits BETWEEN 0 AND 3");
+                    table.PrimaryKey("pk_currency", x => x.code);
+                    table.UniqueConstraint("ak_currency_code_minor_unit_digits", x => new { x.code, x.minor_unit_digits });
+                    table.CheckConstraint("ck_currency_code_uppercase", "code ~ '^[A-Z]{3}$'");
+                    table.CheckConstraint("ck_currency_minor_unit_digits", "minor_unit_digits BETWEEN 0 AND 6");
                 });
 
             migrationBuilder.InsertData(
                 schema: "reference",
                 table: "currency",
-                columns: new[] { "code", "minor_unit_digits", "name" },
+                columns: new[] { "code", "is_active", "minor_unit_digits", "name" },
                 values: new object[,]
                 {
-                    { "EUR", (byte)2, "Euro" },
-                    { "IRR", (byte)0, "Iranian Rial" },
-                    { "KWD", (byte)3, "Kuwaiti Dinar" },
-                    { "USD", (byte)2, "US Dollar" }
+                    { "EUR", true, (byte)2, "Euro" },
+                    { "IRR", true, (byte)0, "Iranian Rial" },
+                    { "KWD", true, (byte)3, "Kuwaiti Dinar" },
+                    { "USD", true, (byte)2, "US Dollar" }
                 });
         }
 

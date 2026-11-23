@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BuildingHub.Modules.Reference.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ReferenceDbContext))]
-    [Migration("20261115151835_InitialReference")]
+    [Migration("20261123074823_InitialReference")]
     partial class InitialReference
     {
         /// <inheritdoc />
@@ -33,6 +33,10 @@ namespace BuildingHub.Modules.Reference.Infrastructure.Persistence.Migrations
                         .HasColumnName("code")
                         .IsFixedLength();
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
                     b.Property<byte>("MinorUnitDigits")
                         .HasColumnType("smallint")
                         .HasColumnName("minor_unit_digits");
@@ -43,35 +47,45 @@ namespace BuildingHub.Modules.Reference.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("name");
 
-                    b.HasKey("Code");
+                    b.HasKey("Code")
+                        .HasName("pk_currency");
+
+                    b.HasAlternateKey("Code", "MinorUnitDigits")
+                        .HasName("ak_currency_code_minor_unit_digits");
 
                     b.ToTable("currency", "reference", t =>
                         {
-                            t.HasCheckConstraint("ck_currency_minor_unit_digits", "minor_unit_digits BETWEEN 0 AND 3");
+                            t.HasCheckConstraint("ck_currency_code_uppercase", "code ~ '^[A-Z]{3}$'");
+
+                            t.HasCheckConstraint("ck_currency_minor_unit_digits", "minor_unit_digits BETWEEN 0 AND 6");
                         });
 
                     b.HasData(
                         new
                         {
                             Code = "IRR",
+                            IsActive = true,
                             MinorUnitDigits = (byte)0,
                             Name = "Iranian Rial"
                         },
                         new
                         {
                             Code = "USD",
+                            IsActive = true,
                             MinorUnitDigits = (byte)2,
                             Name = "US Dollar"
                         },
                         new
                         {
                             Code = "EUR",
+                            IsActive = true,
                             MinorUnitDigits = (byte)2,
                             Name = "Euro"
                         },
                         new
                         {
                             Code = "KWD",
+                            IsActive = true,
                             MinorUnitDigits = (byte)3,
                             Name = "Kuwaiti Dinar"
                         });
